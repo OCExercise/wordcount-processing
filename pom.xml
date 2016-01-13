@@ -39,12 +39,20 @@ under the License.
     </repositories>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <scala.major.version>2.10</scala.major.version>
+        <scala.version>${scala.major.version}.4</scala.version>
         <flink.version>0.9.1</flink.version>
         <maven.compiler.plugin.version>1.8</maven.compiler.plugin.version>
         <start-class>org.opencorrelate.exercise.jvm.scala.SocketTextStreamWordCount</start-class>
     </properties>
     
     <dependencies>
+
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.flink</groupId>
