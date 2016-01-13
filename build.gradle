@@ -1,0 +1,74 @@
+buildscript {
+    repositories {
+        maven { url "https://repository.apache.org/content/repositories/snapshots/" }
+        maven { url "http://repo.maven.apache.org/maven2" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.1.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'scala'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+
+group = 'org.opencorrelate.exercise.jvm.scala'
+version = '0.0.1-SNAPSHOT'
+
+description = """Processing JSON Exercise"""
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+sourceSets.main.scala.srcDirs = ["src/main/scala"]
+sourceSets.test.scala.srcDirs = ["src/test/scala"]
+sourceSets.main.java.srcDirs = []
+sourceSets.test.java.srcDirs = []
+
+
+repositories {
+        
+     maven { url "https://repository.apache.org/content/repositories/snapshots/" }
+     maven { url "http://repo.maven.apache.org/maven2" }
+}
+
+dependencies {
+
+    // Flink
+    compile(group: 'org.apache.flink', name: 'flink-scala', version:'0.9.1') {
+        exclude module: 'slf4j-log4j12'
+    }
+    compile(group: 'org.apache.flink', name: 'flink-streaming-scala', version:'0.9.1') {
+        exclude module: 'slf4j-log4j12'
+    }
+    compile(group: 'org.apache.flink', name: 'flink-clients', version:'0.9.1') {
+        exclude module: 'slf4j-log4j12'
+    }
+
+    // Spring
+    compile "org.scala-lang:scala-library:2.10.6"
+    compile "org.springframework.boot:spring-boot-starter"
+    compile "com.fasterxml.jackson.core:jackson-databind"
+    
+}
+
+springBoot {
+
+    mainClass = "org.opencorrelate.exercise.jvm.scala.SocketTextStreamWordCount"    
+}
+
+
+test {
+    beforeTest { descriptor ->
+        logger.lifecycle("Running test: ${descriptor}")
+    }
+}
+
+bootRun {
+    if ( project.hasProperty('args') ) {
+        args project.args.split('\\s+')
+    }
+}
