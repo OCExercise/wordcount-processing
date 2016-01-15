@@ -39,100 +39,61 @@ under the License.
     </repositories>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <scala.major.version>2.10</scala.major.version>
-        <scala.version>${scala.major.version}.4</scala.version>
-        <flink.version>0.9.1</flink.version>
+        <scala.major.version>2.11</scala.major.version>
+        <scala.version>${scala.major.version}.7</scala.version>
+        <flink.version>1.0-SNAPSHOT</flink.version>
         <maven.compiler.plugin.version>1.8</maven.compiler.plugin.version>
         <start-class>org.opencorrelate.exercise.jvm.scala.SocketTextStreamWordCount</start-class>
     </properties>
     
     <dependencies>
 
+        <!-- Scala -->
+
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
             <version>${scala.version}</version>
         </dependency>
+    
 
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-scala</artifactId>
-            <version>${flink.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>slf4j-log4j12</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+        <!-- Flink -->
         
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-runtime</artifactId>
+            <artifactId>flink-scala_${scala.major.version}</artifactId>
             <version>${flink.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>slf4j-log4j12</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-streaming-core</artifactId>
+            <artifactId>flink-streaming-scala_${scala.major.version}</artifactId>
             <version>${flink.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>slf4j-log4j12</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-streaming-scala</artifactId>
+            <artifactId>flink-clients_${scala.major.version}</artifactId>
             <version>${flink.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>slf4j-log4j12</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-runtime_${scala.major.version}</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+
+
         
-        <dependency>
-            <artifactId>grizzled-slf4j_2.10</artifactId>
-            <groupId>org.clapper</groupId>
-            <version>1.0.2</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.scala-lang</groupId>
-                    <artifactId>scala-library</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-clients</artifactId>
-            <version>${flink.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>slf4j-log4j12</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>grizzled-slf4j_2.10</artifactId>
-                    <groupId>org.clapper</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
 
+        <!-- Serialization -->
+        
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
+
+        <!-- Spring -->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -176,14 +137,45 @@ under the License.
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
                 <executions>
-                    <execution>
-                        <goals>
-                            <goal>add-source</goal>
+                        <execution>
+                            <id>compile</id>
+                            <goals>
                             <goal>compile</goal>
+                            </goals>
+                            <phase>compile</phase>
+                        </execution>
+                 
+                        <execution>
+                            <id>scala-compile-first</id>
+                            <phase>process-resources</phase>
+                            <goals>
+                                <goal>add-source</goal>
+                                <goal>compile</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>scala-test-compile</id>
+                            <phase>process-test-resources</phase>
+                            <goals>
+                                <goal>testCompile</goal>
+                            </goals>
+                        </execution>
+
+                        <execution>
+                            <id>test-compile</id>
+                            <goals>
                             <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                            </goals>
+                            <phase>test-compile</phase>
+                        </execution>
+                 
+                        <execution>
+                            <phase>process-resources</phase>
+                            <goals>
+                            <goal>compile</goal>
+                            </goals>
+                        </execution>
+                    </executions>
             </plugin>
 
             
