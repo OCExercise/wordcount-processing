@@ -32,6 +32,10 @@ $ gradle bootRun -Pargs="localhost <port of you selected>"
 #### Maven
 
 ```
+# You'll need a bleeding edge build of Flink 
+
+$ git clone 
+
 # In another shell, run the following
 
 $ mvn sprint-boot:run -Drun.arguments="localhost <port of your choice>"
